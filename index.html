@@ -1,0 +1,115 @@
+<!doctype html>
+<html>
+  <head>
+    <title>JD PRO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #DAE0E6;
+      }
+      header {
+        background-color: #ffffff;
+        padding: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      header h1 {
+        font-size: 24px;
+        font-weight: normal;
+        margin: 0;
+        color: #1A1A1B;
+      }
+      nav {
+        display: flex;
+      }
+      nav a {
+        text-decoration: none;
+        color: #1A1A1B;
+        margin-left: 10px;
+      }
+      main {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      main h2 {
+        font-size: 24px;
+        font-weight: normal;
+        margin: 0 0 20px;
+      }
+      .post {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+      }
+      .post:last-child {
+        margin-bottom: 0;
+      }
+      .post h3 {
+        font-size: 18px;
+        font-weight: bold;
+        margin: 0;
+      }
+      .post p {
+        font-size: 14px;
+        line-height: 1.5;
+        margin: 0;
+      }
+      @media (max-width: 768px) {
+        main {
+          padding: 10px;
+        }
+        .post {
+          padding: 10px;
+        }
+      }
+    </style>
+  </head>
+ <body>
+    <header>
+      <h1>JD PRO</h1>
+      <nav>
+        <a href="#">Home</a>
+        <a href="#">About</a>
+        <a href="#">Contact</a>
+      </nav>
+    </header>
+    <main>
+      <h2>Submit your details</h2>
+      <form id="user-details-form">
+        <label for="company">Company:</label>
+        <input type="text" id="company" name="company" required>
+        <label for="jobTitle">Job Title:</label>
+        <input type="text" id="jobTitle" name="jobTitle" required>
+        <label for="yearsOfExperience">Years of Experience:</label>
+        <input type="number" id="yearsOfExperience" name="yearsOfExperience" min="0" required>
+        <button type="submit">Submit</button>
+      </form>
+      <div id="response" style="margin-top: 20px;"></div>
+      <script>
+        document.getElementById("user-details-form").addEventListener("submit", function(event) {
+          event.preventDefault();
+
+          const company = document.getElementById("company").value;
+          const jobTitle = document.getElementById("jobTitle").value;
+          const yearsOfExperience = document.getElementById("yearsOfExperience").value;
+
+          const response = `
+            <strong>Company:</strong> ${company}<br>
+            <strong>Job Title:</strong> ${jobTitle}<br>
+            <strong>Years of Experience:</strong> ${yearsOfExperience}
+          `;
+
+          document.getElementById("response").innerHTML = response;
+        });
+      </script>
+    </main>
+  </body>
+</html>
