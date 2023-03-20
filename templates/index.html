@@ -1,0 +1,157 @@
+<!doctype html>
+<html>
+  <head>
+    <title>JD PRO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #DAE0E6;
+      }
+      header {
+        background-color: #ffffff;
+        padding: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      header h1 {
+        font-size: 24px;
+        font-weight: normal;
+        margin: 0;
+        color: #1A1A1B;
+      }
+      nav {
+        display: flex;
+      }
+      nav a {
+        text-decoration: none;
+        color: #1A1A1B;
+        margin-left: 10px;
+      }
+      main {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      main h2 {
+        font-size: 24px;
+        font-weight: normal;
+        margin: 0 0 20px;
+      }
+      .post {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+      }
+      .post:last-child {
+        margin-bottom: 0;
+      }
+      .post h3 {
+        font-size: 18px;
+        font-weight: bold;
+        margin: 0;
+      }
+      .post p {
+        font-size: 14px;
+        line-height: 1.5;
+        margin: 0;
+      }
+      @media (max-width: 768px) {
+        main {
+          padding: 10px;
+        }
+        .post {
+          padding: 10px;
+        }
+      }
+      .content-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+      }
+       .word-textbox {
+        background-color: #ffffff;
+        border: 1px solid #dfe1e5;
+        border-radius: 4px;
+        padding: 10px;
+        width: 80%;
+        height: auto; /* changed this line */
+        margin: 0 auto;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        font-family: "Calibri", Arial, sans-serif;
+        font-size: 16px;
+        line-height: 1.5;
+        overflow-wrap: break-word;
+        resize: none;
+       }
+      .word-textbox[contentEditable] {
+        white-space: pre-wrap;
+      .loader {
+        border: 8px solid #f3f3f3;
+        border-top: 8px solid #3498db;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 2s linear infinite;
+      }
+
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.1/showdown.min.js"></script>
+  </head>
+ <body>
+    <header>
+      <h1>JD PRO</h1>
+      <nav>
+        <a href="#">Home</a>
+        <a href="#">About</a>
+        <a href="#">Contact</a>
+      </nav>
+    </header>
+    <main>
+         <h2>Submit your details</h2>
+      <form id="user-details-form">
+        {{ form.csrf_token }}
+        {{ form.company.label }} {{ form.company(id="company") }}<br>
+        {{ form.job_title.label }} {{ form.job_title(id="jobTitle") }}<br>
+        {{ form.years_of_experience.label }} {{ form.years_of_experience(id="yearsOfExperience") }}<br>
+        <input type="submit" value="Generate">
+      </form>
+      <div id="loader" style="display: none;"></div>
+      <div id="jobDescription"></div>
+    </main>
+    <script>
+      document.getElementById("user-details-form").addEventListener("submit", async function(event) {
+        event.preventDefault();
+
+        const company = document.getElementById("company").value;
+        const jobTitle = document.getElementById("jobTitle").value;
+        const yearsOfExperience = document.getElementById("yearsOfExperience").value;
+
+        // Show the loading spinner
+        document.getElementById("loader").style.display = "block";
+
+        // Fetch the response from your Flask application
+        const response = await fetch(`/generate?company=${company}&jobTitle=${jobTitle}&yearsOfExperience=${yearsOfExperience}`);
+
+        const data = await response.text();
+        
+        // Hide the loading spinner
+        document.getElementById("loader").style.display = "none";
+
+        document.getElementById("jobDescription").innerHTML = data;
+      });
+    </script>
+  </body>
+</html>
