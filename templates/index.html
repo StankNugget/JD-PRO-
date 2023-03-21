@@ -133,17 +133,18 @@
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
       }
-       #loading-page {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(255, 255, 255, 0.8);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 1000;
+        #loading-page {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.5);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          z-index: 1000;
+          flex-direction: column;
 }
         #: response containter wrapper {
           display: none;
@@ -153,8 +154,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.1/showdown.min.js"></script>
   </head>
  <body>
-      <div id="loading-page" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1000; justify-content: center; align-items: center;">
-  <img src="https://imgur.com/CYok8CV.gif" alt="Loading..." />
+<div id="loading-page" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1000; justify-content: center; align-items: center;">
+  <div class="loader-container">
+    <img src="https://imgur.com/CYok8CV.gif" alt="Loading...">
+    <p style="color: white; margin-top: 10px; font-size: 16px; font-weight: bold; text-align: center;">LOADING...</p>
+  </div>
 </div>
 
     <header>
