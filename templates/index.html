@@ -1,6 +1,8 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JD PRO</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
@@ -41,6 +43,7 @@
         font-size: 24px;
         font-weight: normal;
         margin: 0 0 20px;
+        text-align: center;
       }
       .post {
         background-color: #ffffff;
@@ -77,6 +80,19 @@
         justify-content: center;
         gap: 10px;
       }
+      .form-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+}
+      .form-container label,
+      .form-container input {
+         display: block;
+         text-align: center;
+}
+
        .word-textbox {
         background-color: #ffffff;
         border: 1px solid #dfe1e5;
@@ -84,7 +100,8 @@
         padding: 10px;
         width: 80%;
         height: auto; /* changed this line */
-        margin: 0 auto;
+        margin: 20px auto 0; 
+        overflow-y: scroll;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         font-family: "Calibri", Arial, sans-serif;
         font-size: 16px;
@@ -107,10 +124,27 @@
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
       }
+       #loading-page {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+}
+       }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.1/showdown.min.js"></script>
   </head>
  <body>
+      <div id="loading-page" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1000; justify-content: center; align-items: center;">
+  <img src="https://imgur.com/CYok8CV.gif" alt="Loading..." />
+</div>
+
     <header>
       <h1>JD PRO</h1>
       <nav>
@@ -120,38 +154,53 @@
       </nav>
     </header>
     <main>
-         <h2>Submit your details</h2>
-      <form id="user-details-form">
-        {{ form.csrf_token }}
-        {{ form.company.label }} {{ form.company(id="company") }}<br>
-        {{ form.job_title.label }} {{ form.job_title(id="jobTitle") }}<br>
-        {{ form.years_of_experience.label }} {{ form.years_of_experience(id="yearsOfExperience") }}<br>
-        <input type="submit" value="Generate">
-      </form>
+         <h2>Submit Your Details</h2>
+     <form id="user-details-form" class="form-container">
+      {{ form.csrf_token }}
+      {{ form.company.label }} {{ form.company(id="company") }}<br>
+      {{ form.job_title.label }} {{ form.job_title(id="jobTitle") }}<br>
+      {{ form.years_of_experience.label }} {{   form.years_of_experience(id="yearsOfExperience") }}<br>
+      {{ form.additional_requirements.label }} {{ form.additional_requirements(id="additionalRequirements") }}<br>
+      <input type="submit" value="Generate">
+</form>
+
       <div id="loader" style="display: none;"></div>
       <div id="jobDescription"></div>
+      <div id="response-container" class="word-textbox"></div>
     </main>
     <script>
-      document.getElementById("user-details-form").addEventListener("submit", async function(event) {
-        event.preventDefault();
+        document.getElementById("user-details-form").addEventListener("submit", async function(event) {
+            event.preventDefault();
 
-        const company = document.getElementById("company").value;
-        const jobTitle = document.getElementById("jobTitle").value;
-        const yearsOfExperience = document.getElementById("yearsOfExperience").value;
+            const company = document.getElementById("company").value;
+            const jobTitle = document.getElementById("jobTitle").value;
+            const yearsOfExperience = document.getElementById("yearsOfExperience").value;
+            const additionalRequirements = document.getElementById("additionalRequirements").value;
 
-        // Show the loading spinner
-        document.getElementById("loader").style.display = "block";
+            // Show the loading page
+            document.getElementById("loading-page").style.display = "flex";
+            // Hide the main content
+            document.querySelector("main").style.display = "none";
 
-        // Fetch the response from your Flask application
-        const response = await fetch(`/generate?company=${company}&jobTitle=${jobTitle}&yearsOfExperience=${yearsOfExperience}`);
+            try {
+                // Fetch the response from your Flask application
+                const response = await fetch(`/generate_from_params?company=${company}&jobTitle=${jobTitle}&yearsOfExperience=${yearsOfExperience}&additionalRequirements=${additionalRequirements}`);
+                const jobDescription = await response.json();
 
-        const data = await response.text();
-        
-        // Hide the loading spinner
-        document.getElementById("loader").style.display = "none";
 
-        document.getElementById("jobDescription").innerHTML = data;
-      });
+                // Update the job description
+              document.getElementById("jobDescription").innerHTML = `<h2>Job Description:</h2>`;
+              document.getElementById("response-container").innerText = jobDescription.job_description;
+
+                // Show the main content
+                document.querySelector("main").style.display = "block";
+            } catch (error) {
+                console.error('Error:', error);
+            } finally {
+                // Hide the loading page
+                document.getElementById("loading-page").style.display = "none";
+            }
+        });
     </script>
-  </body>
+</body>
 </html>

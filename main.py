@@ -25,6 +25,7 @@ class InputForm(FlaskForm):
     company = StringField("Company", validators=[DataRequired()])
     job_title = StringField("Job Title", validators=[DataRequired()])
     years_of_experience = IntegerField("Years of Experience", validators=[DataRequired()])
+    additional_requirements = StringField("Additional Requirements (any information that will help us generate the job description more accurately)", validators=[DataRequired()])
     submit = SubmitField("Generate")
 
 def CustomChatGPT(user_input):
@@ -52,8 +53,8 @@ def index():
         company = form.company.data
         job_title = form.job_title.data
         years_of_experience = form.years_of_experience.data
-        user_input = f"Job Title: {job_title}, Company: {company}, Years of Experience: {years_of_experience}"
-
+        additional_requirements = form.additional_requirements.data
+        user_input = f"Job Title: {job_title}, Company: {company}, Years of Experience: {years_of_experience}, Additional Requirements: {additional_requirements}"
         response_text = CustomChatGPT(user_input)
     else:
         company = request.args.get('company', '')
@@ -83,12 +84,13 @@ def generate():
     job_description = CustomChatGPT(f"Job Title: {job_title}, Company: {company}, Years of Experience: {years_of_experience}")
     return job_description
 
-@app.route('/generate_job_description', methods=['POST'])
-def generate_job_description_endpoint():
-    company = request.form.get('company')
-    job_title = request.form.get('jobTitle')
-    years_of_experience = request.form.get('yearsOfExperience')
-    job_description = generate_job_description(job_title, company, years_of_experience)
+@app.route('/generate_from_params')
+def generate_from_params():
+    company = request.args.get('company')
+    job_title = request.args.get('jobTitle')
+    years_of_experience = request.args.get('yearsOfExperience')
+    additional_requirements = request.args.get('additionalRequirements')
+    job_description = CustomChatGPT(f"Job Title: {job_title}, Company: {company}, Years of Experience: {years_of_experience}, Additional Requirements: {additional_requirements}")
     return jsonify(job_description=job_description)
 
 if __name__ == '__main__':
