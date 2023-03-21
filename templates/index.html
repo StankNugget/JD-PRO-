@@ -72,6 +72,12 @@
         .post {
           padding: 10px;
         }
+      @media (max-width: 768px) {
+        #loading-page img {
+          max-width: 50%;
+  }
+}
+
       }
       .content-container {
         display: flex;
@@ -80,6 +86,7 @@
         justify-content: center;
         gap: 10px;
       }
+      
       .form-container {
         display: flex;
         flex-direction: column;
@@ -91,6 +98,8 @@
       .form-container input {
          display: block;
          text-align: center;
+         font-weight: bold;
+        font-size: 14px;
 }
 
        .word-textbox {
@@ -136,6 +145,9 @@
         align-items: center;
         z-index: 1000;
 }
+        #: response containter wrapper {
+          display: none;
+        
        }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.1/showdown.min.js"></script>
@@ -155,18 +167,28 @@
     </header>
     <main>
          <h2>Submit Your Details</h2>
-     <form id="user-details-form" class="form-container">
-      {{ form.csrf_token }}
-      {{ form.company.label }} {{ form.company(id="company") }}<br>
-      {{ form.job_title.label }} {{ form.job_title(id="jobTitle") }}<br>
-      {{ form.years_of_experience.label }} {{   form.years_of_experience(id="yearsOfExperience") }}<br>
-      {{ form.additional_requirements.label }} {{ form.additional_requirements(id="additionalRequirements") }}<br>
-      <input type="submit" value="Generate">
-</form>
+        <form id="user-details-form" class="form-container">
+          {{ form.csrf_token }}
+
+          <div class="form-group">
+            {{ form.company.label }} {{ form.company(id="company") }}
+          </div>
+          <div class="form-group">
+            {{ form.job_title.label }} {{ form.job_title(id="jobTitle") }}
+          </div>
+          <div class="form-group">
+            {{ form.years_of_experience.label }} {{ form.years_of_experience(id="yearsOfExperience") }}
+          </div>
+          <div class="form-group">
+            {{ form.additional_requirements.label(id="additionalRequirements-label") }} {{ form.additional_requirements(id="additionalRequirements") }}
+          </div>
+          <input type="submit" value="Generate">
+        </form>
 
       <div id="loader" style="display: none;"></div>
       <div id="jobDescription"></div>
       <div id="response-container" class="word-textbox"></div>
+      
     </main>
     <script>
         document.getElementById("user-details-form").addEventListener("submit", async function(event) {

@@ -25,7 +25,7 @@ class InputForm(FlaskForm):
     company = StringField("Company", validators=[DataRequired()])
     job_title = StringField("Job Title", validators=[DataRequired()])
     years_of_experience = IntegerField("Years of Experience", validators=[DataRequired()])
-    additional_requirements = StringField("Additional Requirements (any information that will help us generate the job description more accurately)", validators=[DataRequired()])
+    additional_requirements = StringField("Additional Requirements", validators=[DataRequired()])
     submit = SubmitField("Generate")
 
 def CustomChatGPT(user_input):
