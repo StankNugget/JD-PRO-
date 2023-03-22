@@ -101,6 +101,10 @@
          font-weight: bold;
         font-size: 14px;
 }
+      .additional-requirements-textbox {
+        width: 90%;
+}
+
 
        .word-textbox {
         background-color: #ffffff;
@@ -184,7 +188,9 @@
             {{ form.years_of_experience.label }} {{ form.years_of_experience(id="yearsOfExperience") }}
           </div>
           <div class="form-group">
-            {{ form.additional_requirements.label(id="additionalRequirements-label") }} {{ form.additional_requirements(id="additionalRequirements") }}
+            {{ form.additional_requirements.label(id="additionalRequirements-label") }} 
+          <textarea id="additionalRequirements" name="additional_requirements" class="word-textbox additional-requirements-textbox"></textarea>
+
           </div>
           <input type="submit" value="Generate">
         </form>
@@ -198,6 +204,15 @@
         document.getElementById("user-details-form").addEventListener("submit", async function(event) {
             event.preventDefault();
 
+const autoGrowTextArea = (element) => {
+  element.style.height = "auto";
+  element.style.height = element.scrollHeight + "px";
+};
+
+const additionalReqTextarea = document.getElementById("additionalRequirements");
+additionalReqTextarea.addEventListener("input", () => autoGrowTextArea(additionalReqTextarea));
+
+          
             const company = document.getElementById("company").value;
             const jobTitle = document.getElementById("jobTitle").value;
             const yearsOfExperience = document.getElementById("yearsOfExperience").value;
